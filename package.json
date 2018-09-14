@@ -15,7 +15,7 @@
     "react": "^16.5.1"
   },
   "scripts": {
-    "docs": "mdx-go docs",
-    "build-docs": "mdx-go build docs -d public"
+    "docs": "mdx-go docs-src",
+    "build-docs": "mdx-go build docs-src -d docs"
   }
 }
