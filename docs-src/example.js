@@ -12,10 +12,10 @@ const scale = [
 export class DivergingLikertExample extends React.Component {
   constructor(props) {
     super(props)
-    this.DivergingLikert = makeDivergingLikert(() => this.container)
+    this.DivergingLikert = makeDivergingLikert(() => this.container)({ scale })
   }
   render() {
-    const DivergingLikert = this.DivergingLikert({ scale })
+    const DivergingLikert = this.DivergingLikert
 
     return (
       <div

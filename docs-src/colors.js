@@ -18,10 +18,10 @@ const colors = ['#555', ['#C9F', '#292'], ['#BDB','#009']]
 export class DivergingColorsExample extends React.Component {
   constructor(props) {
     super(props)
-    this.DivergingLikert = makeDivergingLikert(() => this.container)
+    this.DivergingLikert = makeDivergingLikert(() => this.container)({ scale, colors })
   }
   render() {
-    const DivergingLikert = this.DivergingLikert({ scale, colors })
+    const DivergingLikert = this.DivergingLikert
 
     return (
       <div
