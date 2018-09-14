@@ -1,0 +1,21 @@
+{
+  "name": "react-likert",
+  "version": "0.5.0",
+  "description": "Stylish react + d3 likert renderer for smart use in a table",
+  "main": "src/index.js",
+  "author": "jasonphillips",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "d3": "^5.7.0",
+    "textures": "^1.2.0"
+  },
+  "devDependencies": {
+    "mdx-go": "^1.1.9",
+    "react": "^16.5.1"
+  },
+  "scripts": {
+    "docs": "mdx-go docs",
+    "build-docs": "mdx-go build docs -d public"
+  }
+}
