@@ -1,7 +1,7 @@
-const makeScopedD3Factory = require('../ScopedD3Base')
-const textures = require('textures').default
+import makeScopedD3Factory from '../ScopedD3Base'
+import textures from 'textures'
+import React from 'react'
 const d3 = require('d3')
-const React = require('react')
 
 // general
 const margin = {top: 0, right: 20, bottom: 0, left: 20}
@@ -10,24 +10,24 @@ const minRowPadding = 2
 const total_height = 38
 
 // middle, [negative, negative-accent], [positive, positive-accent]
-const colors = ['#ddd', ['#9CF', '#229'], ['#DBB','#900']]
+const defaultColors = ['#ddd', ['#9CF', '#229'], ['#DBB','#900']]
 
 // pattern set
 const fillPatterns = [
-  p => textures.lines().background(colors[0]).stroke(colors[0]),
-  p => textures.lines().background(colors[p ? 2 : 1][0]).stroke(colors[p ? 2 : 1][1])
+  (p, colors) => textures.lines().background(colors[0]).stroke(colors[0]),
+  (p, colors) => textures.lines().background(colors[p ? 2 : 1][0]).stroke(colors[p ? 2 : 1][1])
           .thicker().orientation(p ? "2/8" : "6/8"),
-  p => textures.lines().background(colors[p ? 2 : 1][0]).stroke(colors[p ? 2 : 1][1])
+  (p, colors) => textures.lines().background(colors[p ? 2 : 1][0]).stroke(colors[p ? 2 : 1][1])
           .orientation("vertical", "horizontal")
           .size(4).strokeWidth(3),
-  p => textures.lines().background(colors[p ? 2 : 1][0]),
+  (p, colors) => textures.lines().background(colors[p ? 2 : 1][0]),
 ]
 
 // functions for assigning color / pattern combination
 const offset = (len, i) => Math.ceil(Math.abs(i + 1 - (len + 1) / 2))
 const polarity = (len, i) => (i + 1 - (len + 1) / 2) > 0
 
-const makeDivergingLikert = makeScopedD3Factory(
+export const makeDivergingLikert = makeScopedD3Factory(
   ({spanData, svg, g, tooltip}) => {
     let {
       getContainer,
@@ -38,6 +38,8 @@ const makeDivergingLikert = makeScopedD3Factory(
       width,
     } = spanData
 
+    const colors = spanData.colors || defaultColors
+
     // fill in any missing values with 0s
     data.map((d,i) => 
       scale
@@ -46,7 +48,6 @@ const makeDivergingLikert = makeScopedD3Factory(
     )
 
     const stack = d3.stack().keys(scale)(data)
-    console.log({ scale, data, stack })
     
     // establish margin up front, replace top-level g 
     g = g.append('g')
@@ -81,7 +82,7 @@ const makeDivergingLikert = makeScopedD3Factory(
     )
 
     const fills = scale.map((s,i) =>
-      fillPatterns[offset(scale.length, i)](polarity(scale.length, i))
+      fillPatterns[offset(scale.length, i)](polarity(scale.length, i), colors)
     )
     fills.forEach(t => t && svg.call(t))
 
@@ -194,17 +195,17 @@ class D3LikertKey extends React.Component {
     this.updateChart = this.updateChart.bind(this)
   }
   componentDidMount() {
-    this.updateChart()
+    setTimeout(() => this.updateChart(), 100)
   }
   updateChart() {
-    const { index, total, legendSize } = this.props;
+    const { index, total, legendSize, colors } = this.props;
     // reset
     this.svg.innerHTML = null;
     this.svg.setAttribute('width', 0);
 
     const width = this.div.getBoundingClientRect().width;
     const svg = d3.select(this.svg).attr('width', width);
-    const pattern = fillPatterns[offset(total, index)](polarity(total, index));
+    const pattern = fillPatterns[offset(total, index)](polarity(total, index), colors);
     svg.call(pattern);
     svg.append('rect')
       .attr('height', legendSize)
@@ -223,7 +224,7 @@ class D3LikertKey extends React.Component {
   }
 }
 
-const LikertLegend = ({ scale, height }) => (
+export const LikertLegend = ({ scale, height, colors }) => (
   <table style={{ width:'100%' }} className="likertLegend">
       <tbody>
       <tr style={{verticalAlign:'bottom', fontWeight:'normal'}}>
@@ -232,12 +233,15 @@ const LikertLegend = ({ scale, height }) => (
       <tr>
           {scale.map((answer,i) => 
           <td key={i} width={`${Math.floor(100 / scale.length)}%`}>
-              <D3LikertKey index={i} total={scale.length} legendSize={height || 10}/>
+              <D3LikertKey
+                index={i} 
+                total={scale.length} 
+                legendSize={height || 10}
+                colors={colors || defaultColors}
+              />
           </td>
           )}
       </tr>
       </tbody>
   </table>
 )
-
-module.exports = { makeDivergingLikert, LikertLegend }

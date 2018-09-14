@@ -1,4 +1,4 @@
-const createSpanVizualizationFactory = require('./SpanVisualization')
+import createSpanVizualizationFactory from './SpanVisualization'
 const d3 = require('d3')
 
 /**
@@ -62,4 +62,4 @@ const makeScopedD3Factory = renderLoop => createSpanVizualizationFactory(
   }, 
 )
 
-module.exports = makeScopedD3Factory
+export default makeScopedD3Factory

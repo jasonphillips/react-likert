@@ -1,7 +1,7 @@
-const ScopedD3Base = require('./components/ScopedD3Base')
-const { makeDivergingLikert, LikertLegend } = require('./components/visualizations/DivergingLikert')
+import ScopedD3Base from './components/ScopedD3Base'
+import { makeDivergingLikert, LikertLegend }  from './components/visualizations/DivergingLikert'
 
-module.exports = {
+export {
   ScopedD3Base,
   makeDivergingLikert,
   LikertLegend,

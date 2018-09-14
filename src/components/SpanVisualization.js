@@ -1,6 +1,5 @@
-const React = require('react')
+import React from 'react'
 const d3 = require('d3')
-
 
 function createSpanVizualizationFactory (renderLoop) {
   /**
@@ -87,4 +86,4 @@ function createSpanVizualizationFactory (renderLoop) {
   }
 }
 
-module.exports = createSpanVizualizationFactory
+export default createSpanVizualizationFactory
