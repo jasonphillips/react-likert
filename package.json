@@ -16,6 +16,6 @@
   },
   "scripts": {
     "docs": "mdx-go docs-src",
-    "build-docs": "mdx-go build docs-src -d docs"
+    "build-docs": "mdx-go build docs-src -d docs --basename react-likert"
   }
 }
