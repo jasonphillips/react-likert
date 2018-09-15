@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeDivergingLikert, LikertLegend } from '../src'
+import { makeDivergingLikert, LikertKey } from '../src'
 
 const scale = [
   'Strongly Disagree',
@@ -9,11 +9,13 @@ const scale = [
   'Strongly Agree'
 ]
 
+const inlineBlockStyle = { float: 'left', paddingRight: '10px', fontSize: '0.75em' }
+
 /*
    colors should be provided as:
   [middle, [negative, negative-accent], [positive, positive-accent] ]
 */
-const colors = ['#555', ['#C9F', '#292'], ['#BDB','#009']]
+const colors = ['#555', ['#9FC', '#295'], ['#BDB','#009']]
 
 export class DivergingColorsExample extends React.Component {
   constructor(props) {
@@ -28,13 +30,27 @@ export class DivergingColorsExample extends React.Component {
         style={{position: 'relative'}} 
         ref={elem => {this.container = elem}}
       >
+
+        {scale.map((choice, i) => 
+          <div key={choice} style={inlineBlockStyle}>
+            {choice} 
+            <LikertKey
+              scale={scale} 
+              colors={colors}
+              index={i} 
+              height={15} 
+              width={15} 
+              style={inlineBlockStyle}
+            />
+          </div>
+        )}
+        <div style={{ clear: 'both' }} />
+
         <table className="demo">
           <thead>
             <tr>
-              <th style={{textAlign: 'left'}}>prompt:</th>
-              <td style={{width: '50%', fontSize: '0.8em' }}>
-                <LikertLegend scale={scale} colors={colors} />
-              </td>
+              <th style={{textAlign: 'left'}}> </th>
+              <td style={{width: '50%' }}> </td>
             </tr>
           </thead>
           <tbody>
@@ -88,7 +104,7 @@ export class DivergingColorsExample extends React.Component {
                   "Disagree": 0.03,
                   "Undecided": 0.2,
                   "Agree": 0.60,
-                  "Strongly Agree": 0.30,
+                  "Strongly Agree": 0.12,
                 }}
               />
             </tr>

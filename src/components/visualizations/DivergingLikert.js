@@ -176,10 +176,10 @@ export const makeDivergingLikert = makeScopedD3Factory(
       console.log({d})
       tooltip.transition()
         .duration(200)
-        .style("opacity", .9);
+        .style("opacity", .9)
       tooltip.html(`<div>${d.key}<br/>${(d['i'].data[d.key] * 100).toFixed(0)}%</div>`)
         .style("left", (d3.event.offsetX) + "px")
-        .style("top", (d3.event.offsetY - 28) + "px");
+        .style("top", (d3.event.offsetY - 28) + "px")
       })
     .on("mouseout", (d) => {
       tooltip.transition()
@@ -190,7 +190,7 @@ export const makeDivergingLikert = makeScopedD3Factory(
 )
 
 // simpler component for legend box
-class D3LikertKey extends React.Component {
+export class LikertKey extends React.Component {
   constructor(props) {
     super(props)
     this.updateChart = this.updateChart.bind(this)
@@ -199,29 +199,34 @@ class D3LikertKey extends React.Component {
     setTimeout(() => this.updateChart(), 100)
   }
   updateChart() {
-    const { index, total, legendSize, colors } = this.props;
+    const { index, total, scale, width, height, colors } = this.props
     // reset
-    this.svg.innerHTML = null;
-    this.svg.setAttribute('width', 0);
+    this.svg.innerHTML = null
+    this.svg.setAttribute('width', 0)
+    const n = total || scale.length
 
-    const width = this.div.getBoundingClientRect().width;
-    const svg = d3.select(this.svg).attr('width', width);
-    const pattern = fillPatterns[offset(total, index)](polarity(total, index), colors);
-    svg.call(pattern);
+    const useColors = colors || defaultColors
+
+    const boxWidth = this.div.getBoundingClientRect().width
+    const boxHeight = this.div.getBoundingClientRect().height
+    console.log({width, height})
+    const svg = d3.select(this.svg).attr('width', width)
+    const pattern = fillPatterns[offset(n, index)](polarity(n, index), useColors)
+    svg.call(pattern)
     svg.append('rect')
-      .attr('height', legendSize)
-      .attr('width', width)
+      .attr('height', height || boxHeight)
+      .attr('width', width || boxWidth)
       .attr('x', 0)
       .attr('y', 0)
-      .attr('fill', pattern.url());
+      .attr('fill', pattern.url())
   }
   render () {
-    const { legendSize } = this.props;
+    const { height, width, style } = this.props
     return (
-      <div ref={elem => { this.div = elem }} style={{width:'100%'}}>
-        <svg ref={elem => { this.svg = elem }} height={legendSize} width={0}/>
+      <div ref={elem => { this.div = elem }} style={style || {}}>
+        <svg ref={elem => { this.svg = elem }} height={height || 0} width={width || 0}/>
       </div>
-    );
+    )
   }
 }
 
@@ -234,11 +239,11 @@ export const LikertLegend = ({ scale, height, colors }) => (
       <tr>
           {scale.map((answer,i) => 
           <td key={i} width={`${Math.floor(100 / scale.length)}%`}>
-              <D3LikertKey
+              <LikertKey
                 index={i} 
                 total={scale.length} 
-                legendSize={height || 10}
-                colors={colors || defaultColors}
+                height={height || 10}
+                colors={colors}
               />
           </td>
           )}

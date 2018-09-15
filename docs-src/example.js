@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeDivergingLikert, LikertLegend } from '../src'
+import { makeDivergingLikert, LikertKey } from '../src'
 
 const scale = [
   'Strongly Disagree',
@@ -8,6 +8,8 @@ const scale = [
   'Agree',
   'Strongly Agree'
 ]
+
+const inlineBlockStyle = { float: 'left', paddingRight: '10px', fontSize: '0.75em' }
 
 export class DivergingLikertExample extends React.Component {
   constructor(props) {
@@ -22,13 +24,30 @@ export class DivergingLikertExample extends React.Component {
         style={{position: 'relative'}} 
         ref={elem => {this.container = elem}}
       >
+        {/*
+            Use <LikertKey /> to draw a box with correct color / pattern
+            for your legend
+        */}
+        
+        {scale.map((choice, i) => 
+          <div key={choice} style={inlineBlockStyle}>
+            {choice} 
+            <LikertKey
+              scale={scale} 
+              index={i} 
+              height={15} 
+              width={15} 
+              style={inlineBlockStyle}
+            />
+          </div>
+        )}
+        <div style={{ clear: 'both' }} />
+
         <table className="demo">
           <thead>
             <tr>
-              <th style={{textAlign: 'left'}}>prompt:</th>
-              <td style={{width: '50%', fontSize: '0.8em' }}>
-                <LikertLegend scale={scale} />
-              </td>
+              <th style={{textAlign: 'left'}}> </th>
+              <td style={{width: '50%'}}> </td>
             </tr>
           </thead>
           <tbody>
