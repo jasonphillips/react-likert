@@ -15,12 +15,15 @@ const inlineBlockStyle = { float: 'left', paddingRight: '10px', fontSize: '0.75e
    colors should be provided as:
   [middle, [negative, negative-accent], [positive, positive-accent] ]
 */
-const colors = ['#555', ['#9FC', '#295'], ['#BDB','#009']]
+const options = { 
+  usePatterns: false,
+  colors: ['#555', ['#9FC', '#295'], ['#BDB','#009']],
+}
 
 export class DivergingColorsExample extends React.Component {
   constructor(props) {
     super(props)
-    this.DivergingLikert = makeDivergingLikert(() => this.container)({ scale, colors })
+    this.DivergingLikert = makeDivergingLikert(() => this.container)({ scale, options })
   }
   render() {
     const DivergingLikert = this.DivergingLikert
@@ -36,7 +39,7 @@ export class DivergingColorsExample extends React.Component {
             {choice} 
             <LikertKey
               scale={scale} 
-              colors={colors}
+              options={options}
               index={i} 
               height={15} 
               width={15} 

@@ -14,7 +14,9 @@ const inlineBlockStyle = { float: 'left', paddingRight: '10px', fontSize: '0.75e
 export class DivergingLikertExample extends React.Component {
   constructor(props) {
     super(props)
-    this.DivergingLikert = makeDivergingLikert(() => this.container)({ scale })
+    this.DivergingLikert = makeDivergingLikert(() => this.container)({ 
+      scale,
+    })
   }
   render() {
     const DivergingLikert = this.DivergingLikert
@@ -28,7 +30,7 @@ export class DivergingLikertExample extends React.Component {
             Use <LikertKey /> to draw a box with correct color / pattern
             for your legend
         */}
-        
+
         {scale.map((choice, i) => 
           <div key={choice} style={inlineBlockStyle}>
             {choice} 

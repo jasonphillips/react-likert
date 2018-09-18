@@ -12,33 +12,54 @@ const total_height = 38
 // middle, [negative, negative-accent], [positive, positive-accent]
 const defaultColors = ['#ddd', ['#9CF', '#229'], ['#DBB','#900']]
 
-// pattern set
+const colorFills = [
+  (p, colors) => colors[0],
+  (p, colors) => colors[p ? 2 : 1][0],
+  (p, colors) => colors[p ? 2 : 1][1],
+  (p, colors) => colors[p ? 2 : 1][2],
+]
+
+// pattern set 
 const fillPatterns = [
-  (p, colors) => textures.lines().background(colors[0]).stroke(colors[0]),
-  (p, colors) => textures.lines().background(colors[p ? 2 : 1][0]).stroke(colors[p ? 2 : 1][1])
-          .thicker().orientation(p ? "2/8" : "6/8"),
-  (p, colors) => textures.lines().background(colors[p ? 2 : 1][0]).stroke(colors[p ? 2 : 1][1])
-          .orientation("vertical", "horizontal")
-          .size(4).strokeWidth(3),
-  (p, colors) => textures.lines().background(colors[p ? 2 : 1][0]),
+  (p, colors) => 
+    textures.lines().background(colors[0]).stroke(colors[0]),
+  (p, colors) => 
+    textures.lines()
+      .background(colors[p ? 2 : 1][0]).stroke(colors[p ? 2 : 1][1])
+      .thicker().orientation(p ? "2/8" : "6/8"),
+  (p, colors) => 
+    textures.lines()
+      .background(colors[p ? 2 : 1][0]).stroke(colors[p ? 2 : 1][1])
+      .orientation("vertical", "horizontal")
+      .size(4).strokeWidth(3),
+  (p, colors) => 
+    textures.lines().background(colors[p ? 2 : 1][0]),
 ]
 
 // functions for assigning color / pattern combination
 const offset = (len, i) => Math.ceil(Math.abs(i + 1 - (len + 1) / 2))
 const polarity = (len, i) => (i + 1 - (len + 1) / 2) > 0
 
+const defaultOptions = {
+  colors: defaultColors,
+  usePatterns: true,
+}
+
 export const makeDivergingLikert = makeScopedD3Factory(
   ({spanData, svg, g, tooltip}) => {
     let {
       getContainer,
       scale,
+      options,
       data,
       min, 
       height, 
       width,
     } = spanData
 
-    const colors = spanData.colors || defaultColors
+    const useOptions = {...defaultOptions, ...(options || {})}
+    const colors = useOptions.colors
+    const usePatterns = useOptions.usePatterns
 
     // fill in any missing values with 0s
     data.map((d,i) => 
@@ -81,10 +102,16 @@ export const makeDivergingLikert = makeScopedD3Factory(
       ((data[i+1] ? data[i+1].rect.offsetY : height) - data[i].rect.offsetY - barHeight) / 2
     )
 
-    const fills = scale.map((s,i) =>
-      fillPatterns[offset(scale.length, i)](polarity(scale.length, i), colors)
-    )
-    fills.forEach(t => t && svg.call(t))
+    
+    let fills = scale.map((s,i) =>
+      colorFills[offset(scale.length, i)](polarity(scale.length, i), colors))
+    
+    if (usePatterns) {
+      fills = scale.map((s,i) =>
+        fillPatterns[offset(scale.length, i)](polarity(scale.length, i), colors)
+      )
+      fills.forEach(t => t && svg.call(t))
+    }
 
     const rowsInd = (new Array(data.length)).fill().map((d,i) => i)
 
@@ -121,7 +148,7 @@ export const makeDivergingLikert = makeScopedD3Factory(
       .data(d => stack.map(s => ({...s, i: s[d] } )))
       .enter()
       .append('rect')
-      .attr('class', 'box')
+      .attr('class', d => `likert-box-${d.index}`)
       .attr('y', 0)
       .attr('height', barHeight)
       .attr('x', d => Math.round(d['i'][0] * width))
@@ -130,7 +157,7 @@ export const makeDivergingLikert = makeScopedD3Factory(
           ? (d['i'][1] - d['i'][0]) * width
           : 0
       ))
-      .style('fill', d => fills[d.index].url())
+      .style('fill', d => usePatterns ? fills[d.index].url() : fills[d.index])
 
     const shadows = rowsInner.selectAll('.box-label-s')
       .data(d => stack.map(s => ({...s, i: s[d] } )).filter(s => !isNaN(s['i'][1]) && (s['i'][1] - s['i'][0])>.1)  )
@@ -199,7 +226,11 @@ export class LikertKey extends React.Component {
     setTimeout(() => this.updateChart(), 100)
   }
   updateChart() {
-    const { index, total, scale, width, height, colors } = this.props
+    const { index, total, scale, width, height, options } = this.props
+    const useOptions = {...defaultOptions, ...(options || {})}
+    const colors = useOptions.colors
+    const usePatterns = useOptions.usePatterns
+
     // reset
     this.svg.innerHTML = null
     this.svg.setAttribute('width', 0)
@@ -209,16 +240,20 @@ export class LikertKey extends React.Component {
 
     const boxWidth = this.div.getBoundingClientRect().width
     const boxHeight = this.div.getBoundingClientRect().height
-    console.log({width, height})
     const svg = d3.select(this.svg).attr('width', width)
-    const pattern = fillPatterns[offset(n, index)](polarity(n, index), useColors)
-    svg.call(pattern)
+
+    const pattern = usePatterns
+      ? fillPatterns[offset(n, index)](polarity(n, index), useColors)
+      : colorFills[offset(n, index)](polarity(n, index), useColors)
+
+    if (usePatterns) svg.call(pattern)
+
     svg.append('rect')
       .attr('height', height || boxHeight)
       .attr('width', width || boxWidth)
       .attr('x', 0)
       .attr('y', 0)
-      .attr('fill', pattern.url())
+      .attr('fill', usePatterns ? pattern.url() : pattern)
   }
   render () {
     const { height, width, style } = this.props
