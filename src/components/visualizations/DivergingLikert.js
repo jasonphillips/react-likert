@@ -200,13 +200,12 @@ export const makeDivergingLikert = makeScopedD3Factory(
       .attr('stroke', '#555555')
 
     boxes.on("mouseover", (d) => {
-      console.log({d})
       tooltip.transition()
         .duration(200)
         .style("opacity", .9)
       tooltip.html(`<div>${d.key}<br/>${(d['i'].data[d.key] * 100).toFixed(0)}%</div>`)
-        .style("left", (d3.event.offsetX) + "px")
-        .style("top", (d3.event.offsetY - 28) + "px")
+        .style("left", Math.round(d3.event.layerX || d3.event.offsetX) + "px")
+        .style("top", Math.round(d3.event.layerY || d3.event.offsetY - 28) + "px")
       })
     .on("mouseout", (d) => {
       tooltip.transition()

@@ -26,8 +26,8 @@ const makeScopedD3Factory = renderLoop => createSpanVizualizationFactory(
       .attr('width', width)
       .attr('height', height)
       .style('position', 'absolute')
-      .style('left', min.x - offset.left)
-      .style('top', min.y - offset.top)
+      .style('left', `${Math.round(min.x - offset.left)}px`)
+      .style('top', `${Math.round(min.y - offset.top)}px`)
 
     const g = svg.append('g').attr('transform', 'translate(0,0)')
 
@@ -35,8 +35,8 @@ const makeScopedD3Factory = renderLoop => createSpanVizualizationFactory(
       .append('div')
       .attr('style', `
         position: absolute; 
-        left: ${min.x - offset.left}px; 
-        top:  ${min.y - offset.top}px;
+        left: ${Math.round(min.x - offset.left)}px; 
+        top:  ${Math.round(min.y - offset.top)}px;
       `)
 
     const tooltip = tooltipDiv.append('div')
