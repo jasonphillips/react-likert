@@ -53,7 +53,7 @@ class ScreenResizeWrapper extends React.Component {
     // if smallOptions & smallBreakpoint, check size
     const { smallOptions, smallBreakpoint, options } = this.props
     return (smallOptions && smallBreakpoint)
-      ? window.innerWidth < smallBreakpoint
+      ? typeof(window)!=="undefined" && window.innerWidth < smallBreakpoint
         ? { ...options, ...smallOptions }
         : options
       : options
