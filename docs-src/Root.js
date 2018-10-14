@@ -3,10 +3,13 @@ import React from 'react'
 import { StyleProvider } from 'mdx-go'
 
 const css = `
+  table {
+    margin-bottom: 1.5em;
+  }
   thead th {
     vertical-align: bottom;
   }
-  .demo > tbody tr > td:first-child {
+  .demo td, .demo th {
     border-bottom: 1px dotted #ccc;
     padding: 5px 0;
   }

@@ -10,23 +10,17 @@ const scale = [
   'Strongly Agree',
 ]
 
-const options = {
-  usePatterns: true,
-  colors: ['#888', ['#800e84', '#ad72b5'], ['#006f30','#48bf6f']],
-}
-
 const data = getRandSurveyData(scale, 5)
 
-const ColorsExample = props => (
+const DivergingLikertExample = props => (
   <div>
     <LikertLegend
       scale={scale}
-      options={options}
       inline={true}
       size={12}
       style={{ textAlign: 'right' }}
     />
-    <TableWrapper scale={scale} options={options} smallOptions={{ diverging: false }} smallBreakpoint={800}>
+    <TableWrapper scale={scale}>
       {
         CellRenderer => 
           <table className="demo" style={{ width: '100%' }}>
@@ -56,5 +50,4 @@ const ColorsExample = props => (
   </div>
 )
 
-export default ColorsExample
-
+export default DivergingLikertExample

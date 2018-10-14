@@ -1,15 +1,43 @@
-import { DivergingLikertExample } from './example'
-import { DivergingColorsExample } from './colors'
+import DivergingColorsExample from './colors'
+import MultiBars from './multiple'
+import StackedLikert from './stacked'
+import StackedContinuous from './stackedContinuous'
+import Simple from './simple'
 export { Root } from './Root'
 
-# Diverging Likert Bars
+# React Likert
 
-See the file `docs-src/example.js` for a demonstration of usage.
+React components for drawing various Likert visualizations in your tables. Uses D3 to draw a continuous 
+chart over the column, yet leaves your table structure intact and adds aria tags for readable data in 
+the original cells.
 
-<DivergingLikertExample />
+[GitHub](https://github.com/jasonphillips/react-likert) | [npm](https://www.npmjs.com/package/react-likert)
+
+## Diverging Likert Bars
+
+Easily generate diverging likert bars that occupy a given column in a standard table. 
+&nbsp;[&lt;view source&gt;](https://github.com/jasonphillips/react-likert/blob/master/docs-src/simple.js) 
+
+<Simple />
 
 ## Custom Colors
 
-Check the syntax in `docs-src/colors.js`.
+Pass custom colors, with or without automatic patterns applied.
+&nbsp;[&lt;view source&gt;](https://github.com/jasonphillips/react-likert/blob/master/docs-src/colors.js) 
 
 <DivergingColorsExample />
+
+## Stacked
+
+Optionally generate stacked bars. 
+&nbsp;[&lt;view source&gt;](https://github.com/jasonphillips/react-likert/blob/master/docs-src/stacked.js) 
+
+<StackedLikert />
+
+## Coninuous
+
+Or instead of positive / negative polarity, indicate a continuous scale of intensity: 
+&nbsp;[&lt;view source&gt;](https://github.com/jasonphillips/react-likert/blob/master/docs-src/stacked.js) 
+
+<StackedContinuous />
+

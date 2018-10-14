@@ -6,7 +6,7 @@ function createSpanVizualizationFactory (renderLoop) {
    * returns a component for table rendering that is scoped to one 
    * shared rendering loop
    */
-  return getContainer => additionalProps => {
+  return (getContainer, additionalProps) => {
     const scope = {
       components: new Set(),
       elements: [],
@@ -15,7 +15,9 @@ function createSpanVizualizationFactory (renderLoop) {
 
     const scopeToData = scope => {
       const rects = scope.elements.map(e => e.getBoundingClientRect())
-      let data = Array.from(scope.components).map(c => c.props.value)
+      const data = Array.from(scope.components).map(c => c.props.value)
+      const labels = Array.from(scope.components).map(c => c.props.label)
+      const colors = Array.from(scope.components).map(c => c.props.color)
       const min = {x: d3.min(rects, r => r.left), y: d3.min(rects, r => r.top)}
 
       return {
@@ -29,6 +31,8 @@ function createSpanVizualizationFactory (renderLoop) {
             offsetY: rects[i].y - min.y,
           },
         })),
+        labels: labels.filter(l => !!l).length ? labels : [],
+        colors: colors.filter(c => !!c).length ? colors : [],
         ...(additionalProps || {}),
       }
     } 
@@ -66,7 +70,7 @@ function createSpanVizualizationFactory (renderLoop) {
         const { value } = this.props
 
         // legible version of the data (accessibility)
-        const text = Object.keys(value).map(key => 
+        const text = (additionalProps && additionalProps.scale || Object.keys(value)).map(key => 
           `${key}: ${Math.round(value[key] * 100.0)}%`
         ).join('; ')
 

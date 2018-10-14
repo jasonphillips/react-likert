@@ -1,5 +1,5 @@
 import React from 'react'
-import { LikertKey, LikertLegend, TableWrapper } from '../src'
+import { LikertLegend, TableWrapper } from '../src'
 import { getRandSurveyData } from './helpers'
 
 const scale = [
@@ -7,17 +7,19 @@ const scale = [
   'Disagree',
   'Undecided',
   'Agree',
-  'Strongly Agree',
+  'Strongly Agree'
 ]
 
 const options = {
-  usePatterns: true,
-  colors: ['#888', ['#800e84', '#ad72b5'], ['#006f30','#48bf6f']],
+  diverging: false,
+  usePatterns: false,
+  continuous: false,
 }
 
-const data = getRandSurveyData(scale, 5)
+const data = getRandSurveyData(scale, 3)
+const floatLegendStyle = { float: 'right', paddingLeft: '10px', fontSize: '0.75em' }
 
-const ColorsExample = props => (
+const StackedExample = props => (
   <div>
     <LikertLegend
       scale={scale}
@@ -26,7 +28,8 @@ const ColorsExample = props => (
       size={12}
       style={{ textAlign: 'right' }}
     />
-    <TableWrapper scale={scale} options={options} smallOptions={{ diverging: false }} smallBreakpoint={800}>
+
+    <TableWrapper scale={scale} options={options}>
       {
         CellRenderer => 
           <table className="demo" style={{ width: '100%' }}>
@@ -34,19 +37,18 @@ const ColorsExample = props => (
               <tr>
                 <th style={{textAlign: 'left'}}>prompt </th>
                 <th style={{textAlign: 'left', width: '3em'}}>n </th>
-                <td style={{width: '50%'}}> </td>
                 <th style={{textAlign: 'left'}}>mean </th>
-                
+                <td style={{width: '50%'}}> </td>
               </tr>
             </thead>
             <tbody>
               {
-                data.map(({ prompt, n, mean, ...values }, i) => 
+                data.map((d,i) => 
                   <tr key={i}>
-                    <td>{prompt}</td>
-                    <td>{n}</td>
-                    <CellRenderer value={values} />
-                    <td style={{ textAlign: 'right' }}>{mean}</td>
+                    <td>{d.prompt}</td>
+                    <td>{d.n}</td>
+                    <td>{d.mean}</td>
+                    <CellRenderer value={d} />
                   </tr>
               )}
             </tbody>
@@ -56,5 +58,5 @@ const ColorsExample = props => (
   </div>
 )
 
-export default ColorsExample
+export default StackedExample
 
