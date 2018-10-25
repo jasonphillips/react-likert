@@ -1,5 +1,7 @@
 ## React-Likert
 
+[![npm version](https://badge.fury.io/js/react-likert.svg)](http://badge.fury.io/js/react-likert) 
+
 React components for rendering Likert-like visualizations within a table.
 
 View the [demo](http://jasonphillips.github.io/react-likert/) for a few examples.
