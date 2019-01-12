@@ -1,6 +1,6 @@
 {
   "name": "react-likert",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "Stylish react + d3 likert renderer for smart use in a table",
   "main": "lib/index.js",
   "author": "jasonphillips",

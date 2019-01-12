@@ -13,7 +13,6 @@ export const multiSelectionBars = makeScopedD3Factory(
   ({spanData, svg, g, tooltip}) => {
     let {
       getContainer,
-      labels,
       colors,
       options,
       data,
@@ -96,8 +95,7 @@ export const multiSelectionBars = makeScopedD3Factory(
         .duration(200)
         .style("opacity", .9);
       tooltip.html(`
-        <div class="tip"><b>${labels[i]}</b>
-          <br/>
+        <div class="tip">
           ${(d.percent * 100).toFixed(0)}%
         </div>
       `)
