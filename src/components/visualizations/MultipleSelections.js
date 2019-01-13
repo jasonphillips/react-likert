@@ -39,6 +39,15 @@ export const multiSelectionBars = makeScopedD3Factory(
       ((data[i+1] ? data[i+1].rect.offsetY : height) - data[i].rect.offsetY - barHeight) / 2
     )
 
+    // 25/50/75 grid lines for x
+    g.call(
+      d3.axisBottom(
+        d3.scaleLinear().domain([0,100]).range([0,width])
+      ).tickValues([25,50,75]).tickSize(height).tickFormat(d=>d)
+    )
+    .call(g => g.select('.domain').remove())
+    .call(g => g.selectAll('.tick').attr('opacity', 0.2))
+
     const rowsInd = (new Array(data.length)).fill().map((d,i) => i)
 
     const rows = g.selectAll('g.row')
