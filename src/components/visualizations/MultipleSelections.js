@@ -22,7 +22,9 @@ export const multiSelectionBars = makeScopedD3Factory(
     } = spanData
 
     const opts = {...defaultOptions, ...(options || {})}
-    const colorFunction = i => colors[i] ? colors[i] : '#944'
+    const colorFunction = opts.colors && typeof(opts.colors)==='function'
+      ? opts.colors
+      : () => '#944'
     
     // establish margin up front, replace top-level g 
     g = g.append('g')
@@ -76,7 +78,7 @@ export const multiSelectionBars = makeScopedD3Factory(
       .attr('y', 0)
       .attr('height', barHeight)
       .attr('x', 0)
-      .attr('fill', ({i}) => colorFunction(i))
+      .attr('fill', ({i, d}) => colorFunction(i, d.percent))
       .attr('width', ({d}) => (
         d.percent
           ? (d.percent * 100 * 1/xScale * width)

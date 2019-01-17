@@ -4,9 +4,13 @@ import { getRandSurveyData } from './helpers'
 
 const data = getRandSurveyData(['Q'], 5)
 
+// `colors` option is a function !
+const getColor = (i, pct) => pct > 0.50
+  ? '#090' : '#009'
+
 const MultipleSelectBars = props => (
   <div>
-    <TableWrapper renderer={multiSelectionBars}>
+    <TableWrapper renderer={multiSelectionBars} options={{colors: getColor}}>
       {
         CellRenderer => 
           <table className="demo" style={{ width: '100%' }}>

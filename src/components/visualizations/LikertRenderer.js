@@ -21,6 +21,7 @@ const defaultOptions = {
   usePatterns: true,
   // this option only used in legend below
   continuous: false,
+  maxBarHeight,
 }
 
 export const renderLikert = makeScopedD3Factory(
@@ -79,7 +80,7 @@ export const renderLikert = makeScopedD3Factory(
 
     const barHeight = Math.min.apply(null, data.map((d,i) => 
       (data[i+1] ? data[i+1].rect.offsetY : height) - data[i].rect.offsetY - minRowPadding * 2
-    ).concat([maxBarHeight]))
+    ).concat([useOptions.maxBarHeight]))
 
     const rowPadding = (i) => (
       ((data[i+1] ? data[i+1].rect.offsetY : height) - data[i].rect.offsetY - barHeight) / 2
