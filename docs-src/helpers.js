@@ -30,7 +30,7 @@ export const getRandDist = scale => {
   const n = scale.length;
 
   for (let i=0; i < n; i++) { 
-    let remaining = 1 - Object.values(dist).reduce((sum,d) => sum+d, 0)
+    let remaining = 1 - Object.keys(dist).reduce((sum,k) => sum+dist[k], 0)
     if (i != n - 1) remaining = Math.min(remaining, 0.35)
     dist[scale[i]] = (i == n - 1) ? remaining : Math.max(Math.random() * remaining, 0.05)
   } 

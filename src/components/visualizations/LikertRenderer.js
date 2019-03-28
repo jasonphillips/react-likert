@@ -196,8 +196,8 @@ export const renderLikert = makeScopedD3Factory(
         .duration(200)
         .style("opacity", .9)
       tooltip.html(`<div>${d.key}<br/>${(d['i'].data[d.key] * 100).toFixed(0)}%</div>`)
-        .style("left", Math.round(d3.event.layerX || d3.event.offsetX) + "px")
-        .style("top", Math.round(d3.event.layerY || d3.event.offsetY - 28) + "px")
+        .style("left", Math.round(d3.event.offsetX || d3.event.layerX) + "px")
+        .style("top", Math.round(d3.event.layerY - 28) + "px")
       })
     .on("mouseout", (d) => {
       tooltip.transition()

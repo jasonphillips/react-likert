@@ -1,6 +1,13 @@
 import React from 'react'
 const d3 = require('d3')
 
+// avoiding Array.from due to compability issues
+const setToArray = set => {
+  const holder = []
+  set.forEach(item => holder.push(item))
+  return holder
+}
+
 function createSpanVizualizationFactory (renderLoop) {
   /**
    * returns a component for table rendering that is scoped to one 
@@ -15,9 +22,10 @@ function createSpanVizualizationFactory (renderLoop) {
 
     const scopeToData = scope => {
       const rects = scope.elements.map(e => e.getBoundingClientRect())
-      const data = Array.from(scope.components).map(c => c.props.value)
-      const labels = Array.from(scope.components).map(c => c.props.label)
-      const colors = Array.from(scope.components).map(c => c.props.color)
+      const componentsList = setToArray(scope.components)
+      const data = componentsList.map(c => c.props.value)
+      const labels = componentsList.map(c => c.props.label)
+      const colors = componentsList.map(c => c.props.color)
       const min = {x: d3.min(rects, r => r.left), y: d3.min(rects, r => r.top)}
 
       return {
@@ -27,8 +35,8 @@ function createSpanVizualizationFactory (renderLoop) {
         height: d3.max(rects, r => r.bottom) - min.y,
         data: data.map((d, i) => ({ ...d, 
           rect: {
-            offsetX: rects[i].x - min.x,
-            offsetY: rects[i].y - min.y,
+            offsetX: rects[i].left - min.x,
+            offsetY: rects[i].top - min.y,
           },
         })),
         labels: labels.filter(l => !!l).length ? labels : [],

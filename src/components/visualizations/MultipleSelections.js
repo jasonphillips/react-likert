@@ -110,8 +110,8 @@ export const multiSelectionBars = makeScopedD3Factory(
           ${(d.percent * 100).toFixed(0)}%
         </div>
       `)
-        .style("left", Math.round(d3.event.layerX || d3.event.offsetX) + "px")
-        .style("top", Math.round(d3.event.layerY || d3.event.offsetY - 28) + "px");
+      .style("left", Math.round(d3.event.offsetX || d3.event.layerX) + "px")
+      .style("top", Math.round(d3.event.layerY - 28) + "px")
       })
     .on("mouseout", (d) => {
       tooltip.transition()
